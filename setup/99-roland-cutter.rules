@@ -1,0 +1,10 @@
+# Give the plugdev group access to a Prolific PL2305 (067b:2305)
+# USB-to-Centronics adapter, so a vinyl cutter on it needs no sudo.
+# Install with setup/install-udev-rules.sh
+#
+# Both rules are needed: the raw USB node (SUBSYSTEM=="usb") and the
+# usblp character node /dev/usb/lpN (SUBSYSTEM=="usbmisc") get their
+# ownership independently.
+
+SUBSYSTEM=="usb", ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2305", MODE="0660", GROUP="plugdev"
+SUBSYSTEM=="usbmisc", ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2305", MODE="0660", GROUP="plugdev"
