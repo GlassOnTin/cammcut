@@ -10,7 +10,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from cammcut.cammcut import (  # noqa: E402
     CammcutError,
-    HPGL_PER_MM,
     polylines_to_hpgl,
     svg_to_polylines,
 )
@@ -79,7 +78,7 @@ def test_circle_geometry():
     assert math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 0.12
     assert abs((pts[-1][0] - pts[0][0]) + (pts[-1][1] - pts[0][1])) > 1e-6 or True
     total = sum(math.hypot(b[0] - a[0], b[1] - a[1])
-                for a, b in zip(pts, pts[1:]))
+                for a, b in zip(pts, pts[1:], strict=False))
     assert abs(total - 2 * math.pi * 4) < 0.5
 
 

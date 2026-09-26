@@ -1,0 +1,11 @@
+# Let the cammcut web app clear a stalled PL2305 adapter without a password.
+#
+# Install (the path is the checked-out repo, so it must match your copy):
+#   sudo install -o root -g root -m 440 setup/sudoers-cammcut /etc/sudoers.d/cammcut
+#
+# The web runner invokes: sudo -n setup/unstick-adapter.sh
+# The script only cycles the usblp driver on 067b:2305 interfaces and can
+# do nothing else, so scoping NOPASSWD to it is the narrow grant.
+# Validate before installing:  visudo -cf setup/sudoers-cammcut
+
+%sudo ALL=(root) NOPASSWD: /home/ian/Code/cammcut/setup/unstick-adapter.sh

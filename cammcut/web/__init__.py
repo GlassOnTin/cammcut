@@ -1,0 +1,1 @@
+"""cammcut.web — LAN web app over the CLI core."""

@@ -1,0 +1,31 @@
+# systemd unit for the cammcut web app (installed on this machine).
+# After editing, reinstall with:
+#   sudo cp setup/cammcut-web.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl restart cammcut-web
+#
+# The app has no authentication; anyone on the LAN can drive the cutter.
+# Serves self-signed TLS on the port; CAMMCUT_TLS=off for plain HTTP.
+#
+# Do NOT add NoNewPrivileges= or similar hardening: the app clears a
+# stalled PL2305 via `sudo -n setup/unstick-adapter.sh` (NOPASSWD rule in
+# /etc/sudoers.d/cammcut), which needs setuid sudo to work.
+
+[Unit]
+Description=cammcut web (Roland CAMM-1 cutter workspace)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ian
+WorkingDirectory=/home/ian/Code/cammcut
+ExecStart=/home/ian/Code/cammcut/.venv/bin/python -m cammcut.web
+# Optional secrets (nexos.ai key): KEY=VALUE lines in data/env.local.
+# The leading '-' makes the file optional; settings.py also reads it
+# directly, so this line is belt and braces for a non-default data dir.
+EnvironmentFile=-/home/ian/Code/cammcut/data/env.local
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -41,7 +41,11 @@ class CammcutError(Exception):
 def _segment_steps(seg):
     """Subdivision count for a curve segment at FLATTEN_TOL_MM."""
     try:
-        length_mm = seg.length() / PX_PER_MM
+        # svgelements' default length error is 1e-12 user units, which float64
+        # never reaches on smooth curves — pass a px-level tolerance instead.
+        # 0.05 px is ~0.013 mm: far below FLATTEN_TOL_MM, so the step count
+        # is unchanged in practice but the recursion stops in a few levels.
+        length_mm = seg.length(error=0.05, min_depth=4) / PX_PER_MM
     except Exception:
         return 1
     if length_mm <= 0:

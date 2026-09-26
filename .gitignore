@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+.venv/
+data/
+web/node_modules/
+cammcut/web/static/
+.pytest_cache/
+.ruff_cache/
